@@ -1,50 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script>
-function setCookie(cname,cvalue,exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
-
-function checkCookie() {
-  let user = getCookie("username");
-  if (user != "") {
-    alert("Welcome again " + user);
-  } else {
-     user = prompt("Please enter your name:","");
-     if (user != "" && user != null) {
-       setCookie("username", user, 30);
-     }
-  }
-}
-function changeUrl() {
-    var site = "https://forms.office.com/Pages/DesignPageV2.aspx?origin=NeoPortalPage&subpage=design&id=ywyDZZ504kyYh6YE7U14LtXtwJ7GcThLnmpKZ_pMA8lUMFo5MDJKUlA4S08yUjdLTU9CNkhWVTJXVS4u&topview=Prefill?embed=true";
-    document.getElementsByName('iFrameName')[0].src = site;
-}
-</script>
 </head>
-
-<body onload="checkCookie()">
-<button onclick="changeUrl()">Load page in iframe</button>
+<body>
 <iframe width="640px" height="480px" src="https://forms.office.com/Pages/DesignPageV2.aspx?origin=NeoPortalPage&subpage=design&id=ywyDZZ504kyYh6YE7U14LtXtwJ7GcThLnmpKZ_pMA8lUMFo5MDJKUlA4S08yUjdLTU9CNkhWVTJXVS4u&topview=Prefill&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
           <iframe name="iFrameName" width="640px" height="480px" src="https://www.google.be" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
 </body>
