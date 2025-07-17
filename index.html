@@ -36,9 +36,14 @@ function checkCookie() {
      }
   }
 }
+function changeUrl() {
+    var site = "https://forms.office.com/Pages/DesignPageV2.aspx?origin=NeoPortalPage&subpage=design&id=ywyDZZ504kyYh6YE7U14LtXtwJ7GcThLnmpKZ_pMA8lUMFo5MDJKUlA4S08yUjdLTU9CNkhWVTJXVS4u&topview=Prefill?embed=true";
+    document.getElementsByName('iFrameName')[0].src = site;
+}
 </script>
 </head>
 
 <body onload="checkCookie()"></body>
-
+<button onclick="changeUrl()">Load page in iframe</button>
+          <iframe name="iFrameName" width="640px" height="480px" src="https://www.google.be" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
 </html>
