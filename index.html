@@ -40,7 +40,7 @@ button:hover {
 <body onload="checkCookie()" style="margin:0;padding:0;overflow:hidden;">
 
 <iframe name="ifrVisitorRegistration" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
-<button type="button" onclick="alert('Hello world!')">Opgeslagen Gegevens Wissen</button>
+<button type="button" onclick="deleteCookie('cUser');">Opgeslagen Gegevens Wissen</button>
 </body>
 <script>
 function setCookie(cname,cvalue,exdays) {
@@ -67,16 +67,25 @@ function getCookie(cname) {
 }
 
 function checkCookie() {
-  let user = getCookie("username");
+  let user = getCookie("cUser");
   if (user != "") {
     changeUrl(user)
   } else {
      user = prompt("Please enter your name:","");
      if (user != "" && user != null) {
-       setCookie("username", user, 30);
+       setCookie("cUser", user, 365);
+       changeUrl(user);
      }
   }
 }
+
+function deleteCookie(cname) {
+  document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  alert("Cookies gewist.");
+  location.replace('https://bayron85.github.io/Bezoekersregistratie/');
+  checkCookie();
+}
+
 function changeUrl(user) {
 //alert("Welcome again " + user);
     var site = "https://forms.office.com/Pages/ResponsePage.aspx?id=ywyDZZ504kyYh6YE7U14LtXtwJ7GcThLnmpKZ_pMA8lUMFo5MDJKUlA4S08yUjdLTU9CNkhWVTJXVS4u&r01b953a9917c4a25aaa3ef7ebbb3d364=VOORNAAM&r6518a57c214949849e5edf358e5704d8="+user+"&r1be4e3ea76f9416cad65f84e718880ef=BEDRIJF&re49fd0ad20d34430b025601c16a9d57e=AFSPRAAK%20MET&r21fd90a5337d4eaa8d962be8942e194c=GSM&r315d8eb127c640588a49c28f0cc1eb5d=NUMMERPLAAT&embed=true";
