@@ -164,7 +164,7 @@ function checkCookie(sUserLang)
   	}
     else
     {
-   		let consent = confirm(sCookies);
+   		let consent = confirm(sDisplayCookies);
 
         if (consent)
         {
@@ -185,7 +185,7 @@ function checkCookie(sUserLang)
 
     		setCookie("cVisitorThule", userInfo, 365);
 
-        	alert(sNewConcept);
+        	alert(sDisplayNewConcept);
         	changeUrl(sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate);
         }
         else
