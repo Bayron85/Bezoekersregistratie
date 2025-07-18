@@ -65,7 +65,8 @@ function getCookie(cCookieName)
       		let value = c.substring(name.length, c.length);
         	try
         	{
-        		return JSON.parse(value); // If it's a JSON string
+            	//If it's a JSON string.
+        		return JSON.parse(value);
 			}
             catch (e)
             {
@@ -93,6 +94,7 @@ function checkCookie()
   	if (user && user.sFirstName && user.sLastName && user.sCompany && user.sForTheAttnOf && user.sMobilePhone && user.sLicensePlate)
     {
     	alert(`Welcome back ${user.sFirstName} ${user.sLastName} from ${user.sCompany}!`);
+        changeUrl(user.sFirstName, user.sLastName, user.sCompany, user.sForTheAttnOf, user.sMobilePhone, user.sLicensePlate);
   	}
     else
     {
