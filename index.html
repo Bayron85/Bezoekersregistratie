@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Bezoekersregistratie</title>
 <style>
 iframe {
   width:		100%;
@@ -37,7 +38,7 @@ button:hover {
 </style>
 </head>
 
-<body onload="checkCookie()" style="margin:0;padding:0;overflow:hidden;">
+<body onload="loadSettings()" style="margin:0;padding:0;overflow:hidden;">
 
 <iframe name="ifrVisitorRegistration" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
 <button type="button" onclick="deleteCookie('cUser');">Opgeslagen Gegevens Wissen</button>
@@ -66,9 +67,17 @@ function getCookie(cname) {
   return "";
 }
 
+function loadSettings() {
+	//De taal ophalen
+	var sUserLang = navigator.language || navigator.userLanguage;
+    
+	
+    checkCookie()
+}
+
 function checkCookie() {
-	var userLang = navigator.language || navigator.userLanguage; 
-alert ("The language is: " + userLang);
+
+
 
 
   let user = getCookie("cUser");
