@@ -39,7 +39,7 @@ button:hover {
 <body onload="loadSettings()" style="margin:0;padding:0;overflow:hidden;">
 	<iframe name="ifrVisitorRegistration" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen>
     </iframe>
-<button type="button" onclick="deleteCookie('cVisitorThule');">Opgeslagen Gegevens Wissen</button>
+<button type="button" id="clearData" onclick="deleteCookie('cVisitorThule');">Opgeslagen gegevens wissen</button>
 </body>
 <script>
 function setCookie(cname,cvalue,exdays)
@@ -80,50 +80,126 @@ function getCookie(cCookieName)
 //Function that starts when the page is loaded.
 function loadSettings()
 {
-	
 	var sUserLang = navigator.language || navigator.userLanguage;
-    alert(sUserLang);
-    checkCookie();
+    
+    if (sUserLang.toLowerCase().startsWith("nl"))
+    {
+		sUserLang = "nl";
+        document.getElementById("clearData").innerHTML="Opgeslagen gegevens wissen";
+	}
+    else if (sUserLang.toLowerCase().startsWith("fr"))
+    {
+		sUserLang = "fr";
+        document.getElementById("clearData").innerHTML="Effacer les données enregistrées";
+	}
+    else
+    {
+		sUserLang = "en";
+        document.getElementById("clearData").innerHTML="Clear saved data";
+	}    
+    
+    checkCookie(sUserLang);
 }
 
 //Check if the Cookie exists, if it doesn't create it.
-function checkCookie()
+function checkCookie(sUserLang)
 {
+	let sDisplayWelcome1 = "";
+    let sDisplayWelcome2 = "";
+    let sDisplayNewConcept = "";
+    let sDisplayCookies = "";
+    let sDisplayFirstName = "";
+    let sDisplayLastName = "";
+    let sDisplayCompany = "";
+    let sDisplayForTheAttnOf = "";
+    let sDisplayMobilePhone = "";
+    let sDisplayLicensePlate = "";
+	if (sUserLang==="nl")
+    {
+    	sDisplayWelcome1 = "Welkom terug";
+        sDisplayWelcome2 = "van";
+        sDisplayNewConcept = "Kies altijd 'Nieuw concept' wanneer gevraagd.";
+        sDisplayCookies = "Cookies toestaan om uw gegevens voor toekomstige bezoeken te onthouden?";
+        sDisplayFirstName = "VOORNAAM:*";
+        sDisplayLastName = "NAAM:*";
+        sDisplayCompany = "BEDRIJF:*";
+    	sDisplayForTheAttnOf = "AFSPRAAK MET:*";
+    	sDisplayMobilePhone = "GSM:*\r\nVoor uw en onze veiligheid, vul uw mobiele nummer correct in! Bedankt.";
+    	sDisplayLicensePlate = "NUMMERPLAAT";
+    }
+    else if (sUserLang==="fr")
+    {
+    	sDisplayWelcome1 = "Bienvenu de retour";
+        sDisplayWelcome2 = "de";
+        sDisplayNewConcept = "Choisissez toujours 'Nouveau concept' lorsqu'on vous le demande.";
+        sDisplayCookies = "Autoriser les cookies pour mémoriser vos données lors de prochaines visites ?";
+        sDisplayFirstName = "PRENOM:*";
+        sDisplayLastName = "NOM:*";
+        sDisplayCompany = "SOCIETE:*";
+    	sDisplayForTheAttnOf = "RENDEZ-VOUS AVEC:*";
+    	sDisplayMobilePhone = "TELEPHONE PORTABLE:*\r\nPour votre sécurité et la nôtre, veuillez renseigner correctement votre numéro de portable ! Merci.";
+    	sDisplayLicensePlate = "PLAQUE D'IMMATRICULATION:*";
+    }
+    else
+    {
+    	sDisplayWelcome1 = "Welcome back";
+        sDisplayWelcome2 = "from";
+        sDisplayNewConcept = "Always choose 'New concept' when asked.";
+        sDisplayCookies = "Allow cookies to remember your data for future visits?";
+        sDisplayFirstName = "FIRST NAME:*";
+        sDisplayLastName = "LAST NAME:*";
+        sDisplayCompany = "COMPANY:*";
+    	sDisplayForTheAttnOf = "FOR THE ATTN OF:*";
+    	sDisplayMobilePhone = "MOBILE PHONE:*\r\nFor your and our safety, please fill out your mobile number correctly! Thanks.";
+    	sDisplayLicensePlate = "LICENSE PLATE:*";
+    }
+
 	let user = getCookie("cVisitorThule");
 
   	if (user && user.sFirstName && user.sLastName && user.sCompany && user.sForTheAttnOf && user.sMobilePhone && user.sLicensePlate)
     {
-    	alert(`Welcome back ${user.sFirstName} ${user.sLastName} from ${user.sCompany}!`);
-        alert("Always choose New concept when asked.");
+    	alert(`${sDisplayWelcome1} ${user.sFirstName} ${user.sLastName} ${sDisplayWelcome2} ${user.sCompany}!`);
+        alert(sDisplayNewConcept);
         changeUrl(user.sFirstName, user.sLastName, user.sCompany, user.sForTheAttnOf, user.sMobilePhone, user.sLicensePlate);
   	}
     else
     {
-    	let sFirstName = promptUntilFilled("FIRST NAME:*");
-        if (sFirstName === null) return;
-      	let sLastName = promptUntilFilled("LAST NAME:*");
-        if (sFirstName === null) return;
-      	let sCompany = promptUntilFilled("COMPANY:*");
-        if (sFirstName === null) return;
-        let sForTheAttnOf = promptUntilFilled("FOR THE ATTN OF:*");
-        if (sFirstName === null) return;
-        let sMobilePhone = promptUntilFilled("MOBILE PHONE:*\r\nFor your and our safety, please fill out your mobile number correctly!");
-        if (sFirstName === null) return;
-        let sLicensePlate = promptUntilFilled("LICENSE PLATE:*");
-        if (sFirstName === null) return;
+   		let consent = confirm(sCookies);
 
-		let userInfo = {sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate};
+        if (consent)
+        {
+			let sFirstName = promptUntilFilled(sDisplayFirstName);
+        	if (sFirstName === null) return;
+      		let sLastName = promptUntilFilled(sDisplayLastName);
+        	if (sLastName === null) return;
+      		let sCompany = promptUntilFilled(sDisplayCompany);
+        	if (sCompany === null) return;
+        	let sForTheAttnOf = promptUntilFilled(sDisplayForTheAttnOf);
+        	if (sForTheAttnOf === null) return;
+        	let sMobilePhone = promptUntilFilled(sDisplayMobilePhone);
+        	if (sMobilePhone === null) return;
+        	let sLicensePlate = promptUntilFilled(sDisplayLicensePlate);
+        	if (sLicensePlate === null) return;
 
-    	setCookie("cVisitorThule", userInfo, 365);
-    	//alert(`Cookie set for ${sFirstName} ${sLastName} from ${sCompany}`);
-        alert("Always choose New concept when asked.");
-        changeUrl(sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate);
+			let userInfo = {sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate};
+
+    		setCookie("cVisitorThule", userInfo, 365);
+
+        	alert(sNewConcept);
+        	changeUrl(sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate);
+        }
+        else
+        {
+            location.replace('https://forms.office.com/e/fEBSEKRJVq');
+        }
   	}
 }
 
-function promptUntilFilled(message) {
+function promptUntilFilled(message)
+{
     let input;
-    while (true) {
+    while (true)
+    {
         input = prompt(message);
         // user canceled
         if (input === null) return null;
@@ -132,15 +208,35 @@ function promptUntilFilled(message) {
     }
 }
 
-function deleteCookie(cname) {
-  document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  alert("Cookies gewist.");
-  location.replace('https://bayron85.github.io/Bezoekersregistratie/');
+function deleteCookie(cname)
+{
+	let user = getCookie(""+cname);
+  	if (user)
+    {
+    	  document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+	
+    var sUserLang = navigator.language || navigator.userLanguage;
+    
+    if (sUserLang.toLowerCase().startsWith("nl"))
+    {
+		alert("Opgeslagen gegevens gewist.");
+	}
+    else if (sUserLang.toLowerCase().startsWith("fr"))
+    {
+		alert("données sauvegardées effacées.");
+	}
+    else
+    {
+		alert("Saved data cleared.");
+	}
+    
+  	location.replace('https://bayron85.github.io/Bezoekersregistratie/');
 }
 
-function changeUrl(sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate) {
-//alert("Welcome again " + user);
-    var site = "https://forms.office.com/Pages/ResponsePage.aspx?id=ywyDZZ504kyYh6YE7U14LtXtwJ7GcThLnmpKZ_pMA8lUMFo5MDJKUlA4S08yUjdLTU9CNkhWVTJXVS4u&r01b953a9917c4a25aaa3ef7ebbb3d364="+sFirstName+"&r6518a57c214949849e5edf358e5704d8="+sLastName+"&r1be4e3ea76f9416cad65f84e718880ef="+sCompany+"&re49fd0ad20d34430b025601c16a9d57e="+sForTheAttnOf+"&r21fd90a5337d4eaa8d962be8942e194c="+sMobilePhone+"&r315d8eb127c640588a49c28f0cc1eb5d="+sLicensePlate+"&embed=true";
+function changeUrl(sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate)
+{
+	let site = "https://forms.office.com/Pages/ResponsePage.aspx?id=ywyDZZ504kyYh6YE7U14LtXtwJ7GcThLnmpKZ_pMA8lUMFo5MDJKUlA4S08yUjdLTU9CNkhWVTJXVS4u&r01b953a9917c4a25aaa3ef7ebbb3d364="+sFirstName+"&r6518a57c214949849e5edf358e5704d8="+sLastName+"&r1be4e3ea76f9416cad65f84e718880ef="+sCompany+"&re49fd0ad20d34430b025601c16a9d57e="+sForTheAttnOf+"&r21fd90a5337d4eaa8d962be8942e194c="+sMobilePhone+"&r315d8eb127c640588a49c28f0cc1eb5d="+sLicensePlate+"&embed=true";
     document.getElementsByName('ifrVisitorRegistration')[0].src = site;
 }
 </script>
