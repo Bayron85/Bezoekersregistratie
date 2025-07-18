@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Bezoekersregistratie</title>
 <style>
 iframe {
   width:		100%;
@@ -37,59 +36,79 @@ button:hover {
 }
 </style>
 </head>
-
 <body onload="loadSettings()" style="margin:0;padding:0;overflow:hidden;">
-
-<iframe name="ifrVisitorRegistration" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
-<button type="button" onclick="deleteCookie('cUser');">Opgeslagen Gegevens Wissen</button>
+	<iframe name="ifrVisitorRegistration" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen>
+    </iframe>
+<button type="button" onclick="deleteCookie('cVisitorThule');">Opgeslagen Gegevens Wissen</button>
 </body>
 <script>
-function setCookie(cname,cvalue,exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+function setCookie(cname,cvalue,exdays)
+{
+	const d = new Date();
+  	d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  	let expires = "expires=" + d.toUTCString();
+  	let value = typeof cvalue === 'object' ? JSON.stringify(cvalue) : cvalue;
+  	document.cookie = `${cname}=${value};${expires};path=/`;
 }
 
-function getCookie(cname) {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
+//Retrieve the Cookie
+function getCookie(cCookieName)
+{
+	let name = cCookieName + "=";
+  	let decodedCookie = decodeURIComponent(document.cookie);
+ 	let ca = decodedCookie.split(';');
+  	for(let i = 0; i < ca.length; i++)
+    {
+    	let c = ca[i].trim();
+		if (c.indexOf(name) === 0)
+        {
+      		let value = c.substring(name.length, c.length);
+        	try
+        	{
+        		return JSON.parse(value); // If it's a JSON string
+			}
+            catch (e)
+            {
+        		return value;
+      		}
+    	}
+  	}
+	return null;
 }
 
-function loadSettings() {
-	//De taal ophalen
-	var sUserLang = navigator.language || navigator.userLanguage;
-    
+//Function that starts when the page is loaded.
+function loadSettings()
+{
 	
-    checkCookie()
+	var sUserLang = navigator.language || navigator.userLanguage;
+    alert(sUserLang);
+    checkCookie();
 }
 
-function checkCookie() {
+//Check if the Cookie exists, if it doesn't create it.
+function checkCookie()
+{
+	let user = getCookie("cVisitorThule");
 
+  	if (user && user.sFirstName && user.sLastName && user.sCompany && user.sForTheAttnOf && user.sMobilePhone && user.sLicensePlate)
+    {
+    	alert(`Welcome back ${user.sFirstName} ${user.sLastName} from ${user.sCompany}!`);
+  	}
+    else
+    {
+    	let sFirstName = prompt("FIRST NAME:");
+      	let sLastName = prompt("LAST NAME:");
+      	let sCompany = prompt("COMPANY:");
+        let sForTheAttnOf = prompt("FOR THE ATTN OF:");
+        let sMobilePhone = prompt("MOBILE PHONE:");
+        let sLicensePlate = prompt("LICENSE PLATE:");
 
+		let userInfo = {sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate};
 
-
-  let user = getCookie("cUser");
-  if (user != "") {
-    changeUrl(user)
-  } else {
-     user = prompt("Please enter your name:","");
-     if (user != "" && user != null) {
-       setCookie("cUser", user, 365);
-       changeUrl(user);
-     }
-  }
+    	setCookie("cVisitorThule", userInfo, 365);
+    	alert(`Cookie set for ${sFirstName} ${sLastName} from ${sCompany}`);
+        changeUrl(sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate);
+  	}
 }
 
 function deleteCookie(cname) {
@@ -98,9 +117,9 @@ function deleteCookie(cname) {
   location.replace('https://bayron85.github.io/Bezoekersregistratie/');
 }
 
-function changeUrl(user) {
+function changeUrl(sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate) {
 //alert("Welcome again " + user);
-    var site = "https://forms.office.com/Pages/ResponsePage.aspx?id=ywyDZZ504kyYh6YE7U14LtXtwJ7GcThLnmpKZ_pMA8lUMFo5MDJKUlA4S08yUjdLTU9CNkhWVTJXVS4u&r01b953a9917c4a25aaa3ef7ebbb3d364=VOORNAAM&r6518a57c214949849e5edf358e5704d8="+user+"&r1be4e3ea76f9416cad65f84e718880ef=BEDRIJF&re49fd0ad20d34430b025601c16a9d57e=AFSPRAAK%20MET&r21fd90a5337d4eaa8d962be8942e194c=GSM&r315d8eb127c640588a49c28f0cc1eb5d=NUMMERPLAAT&embed=true";
+    var site = "https://forms.office.com/Pages/ResponsePage.aspx?id=ywyDZZ504kyYh6YE7U14LtXtwJ7GcThLnmpKZ_pMA8lUMFo5MDJKUlA4S08yUjdLTU9CNkhWVTJXVS4u&r01b953a9917c4a25aaa3ef7ebbb3d364="+sFirstName+"&r6518a57c214949849e5edf358e5704d8="+sLastName+"&r1be4e3ea76f9416cad65f84e718880ef="+sCompany+"&re49fd0ad20d34430b025601c16a9d57e="+sForTheAttnOf+"&r21fd90a5337d4eaa8d962be8942e194c="+sMobilePhone+"&r315d8eb127c640588a49c28f0cc1eb5d="+sLicensePlate+"&embed=true";
     document.getElementsByName('ifrVisitorRegistration')[0].src = site;
 }
 </script>
