@@ -94,23 +94,42 @@ function checkCookie()
   	if (user && user.sFirstName && user.sLastName && user.sCompany && user.sForTheAttnOf && user.sMobilePhone && user.sLicensePlate)
     {
     	alert(`Welcome back ${user.sFirstName} ${user.sLastName} from ${user.sCompany}!`);
+        alert("Always choose New concept when asked.");
         changeUrl(user.sFirstName, user.sLastName, user.sCompany, user.sForTheAttnOf, user.sMobilePhone, user.sLicensePlate);
   	}
     else
     {
-    	let sFirstName = prompt("FIRST NAME:");
-      	let sLastName = prompt("LAST NAME:");
-      	let sCompany = prompt("COMPANY:");
-        let sForTheAttnOf = prompt("FOR THE ATTN OF:");
-        let sMobilePhone = prompt("MOBILE PHONE:");
-        let sLicensePlate = prompt("LICENSE PLATE:");
+    	let sFirstName = promptUntilFilled("FIRST NAME:*");
+        if (sFirstName === null) return;
+      	let sLastName = promptUntilFilled("LAST NAME:*");
+        if (sFirstName === null) return;
+      	let sCompany = promptUntilFilled("COMPANY:*");
+        if (sFirstName === null) return;
+        let sForTheAttnOf = promptUntilFilled("FOR THE ATTN OF:*");
+        if (sFirstName === null) return;
+        let sMobilePhone = promptUntilFilled("MOBILE PHONE:*\r\nFor your and our safety, please fill out your mobile number correctly!");
+        if (sFirstName === null) return;
+        let sLicensePlate = promptUntilFilled("LICENSE PLATE:*");
+        if (sFirstName === null) return;
 
 		let userInfo = {sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate};
 
     	setCookie("cVisitorThule", userInfo, 365);
-    	alert(`Cookie set for ${sFirstName} ${sLastName} from ${sCompany}`);
+    	//alert(`Cookie set for ${sFirstName} ${sLastName} from ${sCompany}`);
+        alert("Always choose New concept when asked.");
         changeUrl(sFirstName, sLastName, sCompany, sForTheAttnOf, sMobilePhone, sLicensePlate);
   	}
+}
+
+function promptUntilFilled(message) {
+    let input;
+    while (true) {
+        input = prompt(message);
+        // user canceled
+        if (input === null) return null;
+        input = input.trim();
+        if (input) return input;
+    }
 }
 
 function deleteCookie(cname) {
