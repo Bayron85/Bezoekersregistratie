@@ -67,6 +67,10 @@ function getCookie(cname) {
 }
 
 function checkCookie() {
+	var userLang = navigator.language || navigator.userLanguage; 
+alert ("The language is: " + userLang);
+
+
   let user = getCookie("cUser");
   if (user != "") {
     changeUrl(user)
@@ -83,6 +87,7 @@ function deleteCookie(cname) {
   document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   alert("Cookies gewist.");
   location.replace('https://bayron85.github.io/Bezoekersregistratie/');
+  checkCookie();
 }
 
 function changeUrl(user) {
